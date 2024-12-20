@@ -37,14 +37,14 @@ public class InfluxClientHandler implements IInfluxClientHandler {
 
         Map<Integer, String> paramNames = influxClientMethod.getParamNames();
 
-        //#{}字符串替换形式
+        //#{} String replacement form
         String sql = paramResolve.resolveSql(paramNames, args, oriSql);
 
         BoundParameterQuery.QueryBuilder queryBuilder = BoundParameterQuery.QueryBuilder.newQuery(sql);
 
         queryBuilder.forDatabase(getDataBase(returnType));
 
-        //${} 占位符形式
+        //${} Placeholder form
         paramResolve.paramBinding(queryBuilder, args, paramNames);
 
         return influxDbService.query(queryBuilder.create(), returnType);
@@ -59,8 +59,8 @@ public class InfluxClientHandler implements IInfluxClientHandler {
     @Override
     public Object insertInflux(Object[] args) {
         insertOrUpdate(args, Insert.class);
-
-        throw new RuntimeException("Inserting uncertain data types");
+        return true;
+//        throw new RuntimeException("Inserting uncertain data types");
     }
 
     @Override
