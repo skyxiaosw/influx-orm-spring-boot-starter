@@ -11,7 +11,7 @@
 
     <name>Spring Boot Starter for Multi Source</name>
     <description>Spring Boot Starter for influx orm framework</description>
-    <url>https://github.com/sky-xsw/influx-orm-spring-boot-starter</url>
+    <url>https://github.com/skyxiaosw/influx-orm-spring-boot-starter</url>
 
     <modules>
         <module>influx-storage</module>
@@ -20,7 +20,7 @@
 
     <developers>
         <developer>
-            <id>sky-xsw</id>
+            <id>skyxiaosw</id>
             <name>sky</name>
             <email>xiaoshuwen0724@163.com</email>
         </developer>
@@ -28,26 +28,24 @@
 
     <licenses>
         <license>
-            <name>The Apache Software License, Version 2.0</name>
-            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
         </license>
     </licenses>
 
+    <scm>
+        <url>https://github.com/skyxiaosw/influx-orm-spring-boot-starter</url>
+        <connection>scm:git:https://github.com/skyxiaosw/influx-orm-spring-boot-starter.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:skyxiaosw/influx-orm-spring-boot-starter.git</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
     <issueManagement>
-        <system>github</system>
-        <url>https://github.com/sky-xsw/influx-orm-spring-boot-starter/issues</url>
+        <system>GitHub</system>
+        <url>https://github.com/skyxiaosw/influx-orm-spring-boot-starter/issues</url>
     </issueManagement>
 
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>ossrh</id>
-            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
 
 
     <properties>
@@ -82,19 +80,6 @@
     </dependencyManagement>
 
     <build>
-        <plugins>
-            <plugin>
-                <groupId>org.sonatype.central</groupId>
-                <artifactId>central-publishing-maven-plugin</artifactId>
-                <version>0.6.0</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <publishingServerId>ossrh</publishingServerId>
-                </configuration>
-            </plugin>
-
-        </plugins>
-
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -118,6 +103,44 @@
             <id>release</id>
             <build>
                 <plugins>
+
+                    <!-- sources.jar -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>3.3.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!-- javadoc.jar -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>3.11.1</version>
+                        <configuration>
+                            <doclint>none</doclint>
+                            <encoding>${project.build.sourceEncoding}</encoding>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <!-- GPG 签名：生成 *.asc -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
@@ -132,38 +155,26 @@
                             </execution>
                         </executions>
                     </plugin>
+
+                    <!-- Central Portal 发布插件 -->
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>3.3.1</version>
-                        <executions>
-                            <execution>
-                                <id>attach-sources</id>
-                                <goals>
-                                    <goal>jar-no-fork</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>3.11.1</version>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>0.6.0</version>
+                        <extensions>true</extensions>
                         <configuration>
-                            <doclint>none</doclint>
+                            <!-- 必须和 settings.xml 的 server id 一致 -->
+                            <publishingServerId>central</publishingServerId>
+
+                            <!-- 第一次建议 false：先在 Portal 上确认 bundle 再点 Publish -->
+                            <autoPublish>false</autoPublish>
                         </configuration>
-                        <executions>
-                            <execution>
-                                <id>attach-javadocs</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
                     </plugin>
+
                 </plugins>
             </build>
         </profile>
     </profiles>
+
 
 </project>
