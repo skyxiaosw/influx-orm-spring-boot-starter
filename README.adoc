@@ -1,0 +1,83 @@
+image:https://img.shields.io/badge/maven%20central-v3.0.1-blue.svg["Maven Central",link="https://search.maven.org/#search%7Cga%7C1%7Ca%3A%22quickfixj-spring-boot-starter%22"]
+image:https://img.shields.io/hexpm/l/plug.svg["Apache 2",link="http://www.apache.org/licenses/LICENSE-2.0"]
+
+
+
+= Influx-orm-spring-boot-starter（For Spring Boot 2.x）
+This project is an Influx ORM framework based on https://spring.io/projects/spring-boot/[Spring Boot Starter]. It separates query statements from business, simplifies the development process, improves development efficiency, reduces the workload of manually processing SQL, and only requires adding interfaces and statements on methods.
+
+== Getting started
+
+=== Influx orm Spring Boot Starter
+To use Influx-orm-spring-boot-starter, you need to add the Influx orm Spring Boot Starter dependency to your project.
+[source,xml]
+----
+<dependency>
+    <groupId>io.github.skyxiaosw</groupId>
+    <artifactId>influx-orm-spring-boot-starter</artifactId>
+    <version>1.0</version>
+</dependency>
+----
+
+
+Add the following configuration to your properties file.
+
+[source,properties]
+----
+spring.influx.url=http://127.0.0.1:8086
+----
+
+[source,yml]
+----
+spring:
+  influx:
+    url: http://10.0.1.208:32652
+----
+
+Add the following annotation @EnableInfluxMappers to your main class.
+[source,java]
+----
+
+@SpringBootApplication
+@EnableInfluxMappers
+public class AppApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(AppApplication.class);
+    }
+}
+----
+
+== Influx orm Spring Boot Starter mapper
+Influx orm Spring Boot Starter mapper is a component that maps SQL statements to Java interfaces.
+the param can support object and paramName.
+
+[source,java]
+----
+import com.data.source.orm.influx.annotation.InfluxMapper;
+import com.data.source.orm.influx.annotation.ParamName;
+import com.data.source.orm.influx.annotation.Select;
+
+@InfluxMapper
+public interface TestMapper {
+
+    @Select("select id,user_name,address,phone,email,date from  user  where " +
+            "id = $id  and date  >= $time")
+    List<UserEntity> queryUser(UserRequest userRequest, @ParamName("time") Long time);
+
+}
+----
+
+
+the usage is as follows:
+[source,java]
+----
+
+    @Autowired(required = false)
+    private TestMapper fundMapper;
+
+----
+
+
+== License
+
+Spring Boot is Open Source software released under the https://www.apache.org/licenses/LICENSE-2.0.html[Apache 2.0 license].
