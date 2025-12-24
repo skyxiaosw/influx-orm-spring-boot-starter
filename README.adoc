@@ -94,6 +94,13 @@ the usage is as follows:
     @Autowired(required = false)
     private TestMapper testMapper;
 
+    public List<UserEntity> queryUser() {
+        UserRequest userRequest = new UserRequest();
+        userRequest.setStart(Instant.now().minus(1, ChronoUnit.DAYS));
+        userRequest.setStop(Instant.now());
+        return testMapper.queryUser(userRequest);
+    }
+
 ----
 
 
