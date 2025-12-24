@@ -75,6 +75,11 @@ the usage is as follows:
     @Autowired(required = false)
     private TestMapper testMapper;
 
+    public void queryUser() {
+        UserRequest userRequest = new UserRequest();
+        userRequest.setId(1);
+        List<UserEntity> userEntities = testMapper.queryUser(userRequest, System.currentTimeMillis());
+    }
 ----
 
 
