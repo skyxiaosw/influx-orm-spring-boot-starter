@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.sky</groupId>
+        <groupId>io.github.skyxiaosw</groupId>
         <artifactId>influx-orm-spring-boot-starter</artifactId>
         <version>1.0</version>
     </parent>
 
-    <groupId>com.sky</groupId>
+    <groupId>io.github.skyxiaosw</groupId>
     <artifactId>influx-storage</artifactId>
     <version>1.0</version>
 
