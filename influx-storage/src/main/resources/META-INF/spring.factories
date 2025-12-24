@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.sky.storage.influx.InfluxStorageAutoConfiguration
+com.github.sky.storage.influx.InfluxStorageAutoConfiguration

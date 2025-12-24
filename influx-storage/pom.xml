@@ -42,9 +42,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.influxdb</groupId>
-            <artifactId>influxdb-java</artifactId>
+            <groupId>com.influxdb</groupId>
+            <artifactId>influxdb-spring</artifactId>
+            <version>${influxdb-client.version}</version>
         </dependency>
-
     </dependencies>
 </project>

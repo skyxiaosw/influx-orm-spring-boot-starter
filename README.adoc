@@ -3,36 +3,48 @@ image:https://img.shields.io/hexpm/l/plug.svg["Apache 2",link="http://www.apache
 
 
 
-= Influx-orm-spring-boot-starter（For Spring Boot 2.x）
+= Influx-orm-spring-boot-starter（For Spring Boot 3.x）
 This project is an Influx ORM framework based on https://spring.io/projects/spring-boot/[Spring Boot Starter]. It separates query statements from business, simplifies the development process, improves development efficiency, reduces the workload of manually processing SQL, and only requires adding interfaces and statements on methods.
 
-== Getting started
+== Requirements
+- Java 17+
+- Spring Boot 3.x.x
 
-=== Influx orm Spring Boot Starter
+
+== Installation
 To use Influx-orm-spring-boot-starter, you need to add the Influx orm Spring Boot Starter dependency to your project.
 [source,xml]
 ----
 <dependency>
     <groupId>io.github.skyxiaosw</groupId>
     <artifactId>influx-orm-spring-boot-starter</artifactId>
-    <version>1.0</version>
+    <version>2.0</version>
 </dependency>
 ----
 
-
+== Configuration
 Add the following configuration to your properties file.
 
 [source,properties]
 ----
-spring.influx.url=http://127.0.0.1:8086
+influx.enable=true
+influx.url=http://127.0.0.1:8086?readTimeout=10s&connectTimeout=5s&logLevel=BODY&writeTimeout=10s
+influx.bucket=your-bucket
+influx.token=your-token
+influx.org=your-org
 ----
 
 [source,yml]
 ----
-spring:
-  influx:
-    url: http://10.0.1.208:32652
+influx:
+  bucket: your-bucket
+  enable: true
+  org: your-org
+  token: your-token
+  url: http://127.0.0.1:8086?readTimeout=10s&connectTimeout=5s&logLevel=BODY&writeTimeout=10s
 ----
+
+== Usage
 
 Add the following annotation @EnableInfluxMappers to your main class.
 [source,java]
@@ -47,9 +59,8 @@ public class AppApplication {
 }
 ----
 
-== Influx orm Spring Boot Starter mapper
+=== Influx orm Spring Boot Starter mapper
 Influx orm Spring Boot Starter mapper is a component that maps SQL statements to Java interfaces.
-the param can support object and paramName.
 
 [source,java]
 ----
@@ -60,9 +71,17 @@ import com.data.source.orm.influx.annotation.Select;
 @InfluxMapper
 public interface TestMapper {
 
-    @Select("select id,user_name,address,phone,email,date from  user  where " +
-            "id = $id  and date  >= $time")
-    List<UserEntity> queryUser(UserRequest userRequest, @ParamName("time") Long time);
+    @Select(
+        """
+            from(bucket: "#{bucket}")
+            |> range(start:#{start},stop:#{stop})
+            |> filter(fn: (r) => r._measurement == "your_measurement" )
+            |> filter(fn: (r) => r.name == "#{name}" and r.id == "#{id}")
+            |> pivot(rowKey:["_time"], columnKey: ["_field"], valueColumn: "_value")
+            |> sort(columns:["_time"], desc: true)
+        """
+    )
+    List<UserEntity> queryUser(UserRequest userRequest);
 
 }
 ----
@@ -73,7 +92,7 @@ the usage is as follows:
 ----
 
     @Autowired(required = false)
-    private TestMapper fundMapper;
+    private TestMapper testMapper;
 
 ----
 
