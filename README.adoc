@@ -73,7 +73,7 @@ the usage is as follows:
 ----
 
     @Autowired(required = false)
-    private TestMapper fundMapper;
+    private TestMapper testMapper;
 
 ----
 
